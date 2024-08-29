@@ -1,0 +1,23 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+@layer components {
+  .iconL {
+    @apply w-14 h-14 rounded-full bg-white;
+  }
+  .iconL-frame{
+    @apply w-16 h-16 rounded-full flex items-center justify-center;
+  }
+  .iconM {
+    @apply w-10 h-10 rounded-full bg-white;
+  }
+  .iconM-frame{
+    @apply w-12 h-12 rounded-full flex items-center justify-center;
+  }
+  .iconS {
+    @apply w-8 h-8 rounded-full bg-white;
+  }
+  .iconS-frame{
+    @apply w-10 h-10 rounded-full flex items-center justify-center;
+  }
+}

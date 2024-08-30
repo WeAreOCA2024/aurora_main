@@ -4,6 +4,8 @@ import { useState } from "react";
 import { MyStatusComponent } from "./components/mystatus";
 import { UserTypes } from "@/types/type";
 import { MyProfileListComponent } from "./components/myprofilelist";
+import { FriendsListComponent } from "./components/friendslist";
+import { PrimarybarComponent } from "./components/primarybar";
 
 const friends: UserTypes[] = [
   {
@@ -47,6 +49,180 @@ const friends: UserTypes[] = [
     story: false,
     online: true,
     color: "green",
+  },  {
+    id: 7,
+    name: "Jane Johnson",
+    story: false,
+    online: true,
+    color: "green",
+  },  {
+    id: 8,
+    name: "Jane Johnson",
+    story: false,
+    online: true,
+    color: "green",
+  },  {
+    id: 9,
+    name: "Jane Johnson",
+    story: false,
+    online: true,
+    color: "green",
+  },  {
+    id: 10,
+    name: "Jane Johnson",
+    story: false,
+    online: true,
+    color: "green",
+  },  {
+    id: 11,
+    name: "Jane Johnson",
+    story: false,
+    online: true,
+    color: "green",
+  },  {
+    id: 12,
+    name: "Jane Johnson",
+    story: false,
+    online: true,
+    color: "green",
+  },  {
+    id: 13,
+    name: "Jane Johnson",
+    story: false,
+    online: true,
+    color: "green",
+  },  {
+    id: 14,
+    name: "Jane Johnson",
+    story: false,
+    online: true,
+    color: "green",
+  },  {
+    id: 15,
+    name: "Jane Johnson",
+    story: false,
+    online: true,
+    color: "green",
+  },  {
+    id: 16,
+    name: "Jane Johnson",
+    story: false,
+    online: true,
+    color: "green",
+  },  {
+    id: 17,
+    name: "Jane Johnson",
+    story: false,
+    online: true,
+    color: "green",
+  },  {
+    id: 18,
+    name: "Jane Johnson",
+    story: false,
+    online: true,
+    color: "green",
+  },  {
+    id: 19,
+    name: "Jane Johnson",
+    story: false,
+    online: true,
+    color: "green",
+  },  {
+    id: 20,
+    name: "Jane Johnson",
+    story: false,
+    online: true,
+    color: "green",
+  },  {
+    id: 21,
+    name: "Jane Johnson",
+    story: false,
+    online: true,
+    color: "green",
+  },  {
+    id: 22,
+    name: "Jane Johnson",
+    story: false,
+    online: true,
+    color: "green",
+  },  {
+    id: 23,
+    name: "Jane Johnson",
+    story: false,
+    online: true,
+    color: "green",
+  },  {
+    id: 24,
+    name: "Jane Johnson",
+    story: false,
+    online: true,
+    color: "green",
+  },  {
+    id: 25,
+    name: "Jane Johnson",
+    story: false,
+    online: true,
+    color: "green",
+  },  {
+    id: 26,
+    name: "Jane Johnson",
+    story: false,
+    online: true,
+    color: "green",
+  },  {
+    id: 27,
+    name: "Jane Johnson",
+    story: false,
+    online: true,
+    color: "green",
+  },  {
+    id: 28,
+    name: "Jane Johnson",
+    story: false,
+    online: true,
+    color: "green",
+  },  {
+    id: 29,
+    name: "Jane Johnson",
+    story: false,
+    online: true,
+    color: "green",
+  },  {
+    id: 30,
+    name: "Jane Johnson",
+    story: false,
+    online: true,
+    color: "green",
+  },  {
+    id: 31,
+    name: "Jane Johnson",
+    story: false,
+    online: true,
+    color: "green",
+  },  {
+    id: 32,
+    name: "Jane Johnsonafdjkashfkashdfjashldfhsdlfhsal",
+    story: false,
+    online: true,
+    color: "green",
+  },  {
+    id: 33,
+    name: "Jane Johnson",
+    story: false,
+    online: true,
+    color: "green",
+  },  {
+    id: 34,
+    name: "Jane Johnson",
+    story: false,
+    online: true,
+    color: "green",
+  },  {
+    id: 35,
+    name: "Jane Johnson",
+    story: true,
+    online: true,
+    color: "green",
   },
 ];
 
@@ -84,26 +260,23 @@ const my_profiles: UserTypes[] = [
 export default function Page() {
   const [selectedPrimaryIcon, setSelectedPrimaryIcon] = useState<string>("dm");
   const [usingProfile, setUsingProfile] = useState<UserTypes>(my_profiles[0]);
+  const [selectedFriend, setSelectedFriend] = useState<UserTypes | null>(null);
 
   // arrow function
-  const PrimaryIcons = ({ name, icon }: { name: string; icon: string }) => {
-    return (
-      <p
-        className={`text-3xl w-14 h-14 border-2 ${name !== selectedPrimaryIcon ? "border-neutral-600" : "border-white"} rounded-2xl flex justify-center items-center text-white`}
-        onClick={() => {setSelectedPrimaryIcon(name)}}
-      >
-        {icon}
-      </p>
-    );
-  };
+
+
+  const handleChangeProfile = (profile: UserTypes) => {
+    setUsingProfile(profile);
+  }
+
+  const handleChangeSelectedFriend = (friend: UserTypes) => {
+    setSelectedFriend(friend);
+  }
 
   return (
     <main className="flex">
       <section className="h-screen w-28 bg-Black flex flex-col items-center gap-4 pt-8">
-        <PrimaryIcons name="dm" icon="📩" />
-        <PrimaryIcons name="server" icon="👥" />
-        <PrimaryIcons name="notification" icon="📁" />
-        <PrimaryIcons name="add_server" icon="十" />
+        <PrimarybarComponent setSelectedPrimaryIcon={setSelectedPrimaryIcon} selectedPrimaryIcon={selectedPrimaryIcon} />
         <hr className="w-2/3" />
         {friends.map((friend) => {
           if (friend.story) {
@@ -115,14 +288,14 @@ export default function Page() {
           }
         })}
       </section>
-      <section className="h-screen max-w-96 bg-Gray2">
+      <section className="h-screen w-96 bg-Gray2 flex flex-col">
         <MyStatusComponent my_profile={usingProfile} />
-        <div className="overflow-scroll">
-          <MyProfileListComponent my_profiles={my_profiles} usingid={usingProfile.id}/>
+        <MyProfileListComponent my_profiles={my_profiles} usingid={usingProfile.id} handleChangeProfile={handleChangeProfile}/>
+        <div className="overflow-y-auto h-full">
+          <FriendsListComponent friends={friends} selectedFriend={selectedFriend} handleChangeSelectedFriend={handleChangeSelectedFriend}/>
         </div>
       </section>
       <section className="h-screen w-full bg-Black">
-
       </section>
     </main>
   );

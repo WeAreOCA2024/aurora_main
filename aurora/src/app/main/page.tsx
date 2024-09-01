@@ -6,6 +6,7 @@ import { UserTypes } from "@/types/type";
 import { MyProfileListComponent } from "./components/myprofilelist";
 import { FriendsListComponent } from "./components/friendslist";
 import { PrimarybarComponent } from "./components/primarybar";
+import DMCompornent from "./components/dm";
 
 const friends: UserTypes[] = [
   {
@@ -275,7 +276,7 @@ export default function Page() {
 
   return (
     <main className="flex">
-      <section className="h-screen w-28 bg-Black flex flex-col items-center gap-4 pt-8">
+      <section className="h-screen w-28 bg-black flex flex-col items-center gap-4 pt-8">
         <PrimarybarComponent setSelectedPrimaryIcon={setSelectedPrimaryIcon} selectedPrimaryIcon={selectedPrimaryIcon} />
         <hr className="w-2/3" />
         {friends.map((friend) => {
@@ -288,7 +289,7 @@ export default function Page() {
           }
         })}
       </section>
-      <section className="h-screen w-96 bg-Gray2 flex flex-col">
+      <section className="h-screen w-96 bg-gray2 flex flex-col">
         <MyStatusComponent my_profile={usingProfile} />
         <MyProfileListComponent my_profiles={my_profiles} usingid={usingProfile.id} handleChangeProfile={handleChangeProfile}/>
         <div className="overflow-y-auto h-full">
@@ -296,6 +297,7 @@ export default function Page() {
         </div>
       </section>
       <section className="h-screen w-full bg-Black">
+        <DMCompornent />
       </section>
     </main>
   );

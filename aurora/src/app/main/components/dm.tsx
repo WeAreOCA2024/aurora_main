@@ -1,6 +1,7 @@
 import { Menu, Phone } from 'lucide-react'
 import { Inter } from 'next/font/google'
 import React from 'react'
+import Call from '@/assets/svg/call.svg'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -18,7 +19,7 @@ const DMCompornent = () => {
             </div>
           </div>
           <div className="flex items-center space-x-4">
-            <Phone className="w-6 h-6" />
+            <Call />
             <Menu className="w-6 h-6" />
           </div>
         </div>
@@ -26,7 +27,7 @@ const DMCompornent = () => {
       </header>
       <div className="flex-1 overflow-y-auto px-4 py-2">
         <div className="text-center text-sm text-gray-500 my-2">Today</div>
-        {[8.11, 9.53, 9.55].map((time, index) => (
+        {['8:10', '9:33', '9:55'].map((time, index) => (
           <div key={index} className="flex items-start mb-4">
             <div className="bg-gray-700 rounded-lg p-2 max-w-xs">
               <p className="text-sm">おお森山神社！</p>
@@ -34,7 +35,7 @@ const DMCompornent = () => {
             <span className="text-xs text-gray-500 self-end ml-2">{time} PM</span>
           </div>
         ))}
-        {[9.54, 9.54].map((time, index) => (
+        {['9:54', '9:54'].map((time, index) => (
           <div key={index} className="flex items-start justify-end mb-4">
             <span className="text-xs text-gray-500 self-end mr-2">{time} PM</span>
             <div className="bg-blue-500 rounded-lg p-2 max-w-xs">

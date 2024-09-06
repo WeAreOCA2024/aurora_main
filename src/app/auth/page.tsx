@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { AuthComponent } from './components/auth';
 
 export default function Page() {
   const headerOptions = (name:string,link:string) => {
@@ -10,8 +11,8 @@ export default function Page() {
         </li>
       </Link>
     )
-
   }
+
   return (
     <>
       <header className="flex justify-around w-1/2 mx-[calc(100%/4)] py-4 items-end">
@@ -22,7 +23,8 @@ export default function Page() {
           {headerOptions("問い合わせ","/contact")}
         </ul>
       </header>
-      <main className="flex justify-center pt-96 gap-12">
+      <main className="">
+        <AuthComponent />
       </main>
     </>
   );

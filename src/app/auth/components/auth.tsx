@@ -2,7 +2,7 @@
 
 import { useState } from "react"
 import { SignupComponent } from "./signup_inputform"
-import { LoginComponent } from "./login"
+import { LoginComponent } from "./login_inpurform"
 
 export const AuthComponent = () => {
   const [mode, setMode] = useState<string | null>(null)

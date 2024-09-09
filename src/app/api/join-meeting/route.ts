@@ -20,7 +20,7 @@ const credentialsProvider = fromCognitoIdentityPool({
 
 const chimeSDKMeetings = new ChimeSDKMeetings({
   region,
-  credentials: credentialsProvider,
+  // credentials: credentialsProvider,
 });
 
 export async function POST(req: Request) {

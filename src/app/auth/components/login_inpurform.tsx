@@ -3,10 +3,9 @@ import { LoginSubmitComponent } from "./login_submit";
 import { AuthFormComponent } from "./authform";
 import { AuthFormButtonsComponent } from "./formbuttons";
 
-export const LoginComponent = () => {
+export const LoginComponent = ({index,setIndex}:{index:number, setIndex: (i:number) => void}) => {
   const [username, setUsername] = useState<string>("");
   const [password, setPassword] = useState<string>("");
-  const [index, setIndex] = useState<number>(0);
   const [systemMessage, setSystemMessage] = useState<string>("");
   const inputListName = ["Username", "Password"];
   const inputList = [username, password];
@@ -35,10 +34,10 @@ export const LoginComponent = () => {
 
   return (
     <>
-      <form onSubmit={handleSubmit} className="flex flex-col justify-center gap-4">
+      <form onSubmit={handleSubmit} className="flex flex-col justify-center gap-2">
         {index < 2 ? (
           <>
-            <AuthFormComponent index={index} username={username} systemMessage={systemMessage} inputListName={inputListName} inputList={inputList} handleInputChange={handleInputChange} />
+            <AuthFormComponent index={index} systemMessage={systemMessage} inputListName={inputListName} inputList={inputList} handleInputChange={handleInputChange} />
             <AuthFormButtonsComponent handlePrev={handlePrev} />
           </>
         ):(

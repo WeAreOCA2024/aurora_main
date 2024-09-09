@@ -11,15 +11,15 @@ export const SignupSubmitComponent = ({ username, email, password, handlePrev }:
   const maskedPassword = "*".repeat(password.length);
 
   return (
-    <div className="flex flex-col gap-8 p-8 max-w-lg mx-auto mt-32">
+    <div className="flex flex-col gap-8 p-8 max-w-lg mx-auto mt-24">
       <p className="border-b-2 border-blue-600 pb-3 text-xl pr-4">
-        <span className="inline-block w-40 font-semibold text-gray-700">Username:</span>{username}
+        <span className="inline-block w-40 font-semibold text-white">Username:</span>{username}
       </p>
       <p className="border-b-2 border-blue-600 pb-3 text-xl pr-4">
-        <span className="inline-block w-40 font-semibold text-gray-700">Email:</span>{email}
+        <span className="inline-block w-40 font-semibold text-white">Email:</span>{email}
       </p>
       <p className="border-b-2 border-blue-600 pb-3 text-xl pr-4">
-        <span className="inline-block w-40 font-semibold text-gray-700">Password:</span>{maskedPassword}
+        <span className="inline-block w-40 font-semibold text-white">Password:</span>{maskedPassword}
       </p>
 
       <div className="flex justify-center gap-8">

@@ -1,31 +1,26 @@
-import Link from 'next/link';
+import React from 'react';
 import { AuthComponent } from './components/auth';
+import { Header } from '../components/header';
+
+const AuroraUnderline = () => (
+  <div className="h-1 w-8/12 bg-gradient-to-r from-purple-400 via-pink-500 to-red-500 animate-pulse" />
+);
 
 export default function Page() {
-  const headerOptions = (name:string,link:string) => {
-    return (
-      <Link href={link}>
-        <li className="relative text-base cursor-pointer group px-2 text-center">
-          {name}
-          <span className="absolute left-0 bottom-0 w-0 h-0.5 bg-red-300 transition-all duration-700 group-hover:w-full mt-3"></span>
-        </li>
-      </Link>
-    )
-  }
-
   return (
-    <>
-      <header className="flex justify-around w-1/2 mx-[calc(100%/4)] py-4 items-end">
-        <h1 className="text-5xl">Aurora</h1>
-        <ul className="flex gap-3">
-          {headerOptions("プロダクト","/product")}
-          {headerOptions("料金","/price")}
-          {headerOptions("問い合わせ","/contact")}
-        </ul>
-      </header>
-      <main className="">
+    <div className="flex flex-col min-h-screen bg-gray-900 text-white">
+      <Header />
+      <main className="flex-grow flex flex-col items-center p-8">
+        <h1 className="text-4xl md:text-6xl font-bold text-center mt-36 mb-3">
+          全ての会話が、もっと
+          <span className="bg-clip-text text-transparent bg-gradient-to-r from-blue-400 via-purple-500 to-pink-500 animate-pulse">
+            クリエイティブ
+          </span>
+          に
+        </h1>
+        <AuroraUnderline />
         <AuthComponent />
       </main>
-    </>
+    </div>
   );
 }

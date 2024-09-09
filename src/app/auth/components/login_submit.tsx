@@ -10,7 +10,7 @@ export const LoginSubmitComponent = ({ username, password, handlePrev }: SignupS
   const maskedPassword = "*".repeat(password.length);
 
   return (
-    <div className="flex flex-col gap-8 p-8 max-w-lg mx-auto mt-32">
+    <div className="flex flex-col gap-8 p-8 max-w-lg mx-auto mt-24">
       <p className="border-b-2 border-blue-600 pb-3 text-xl pr-4">
         <span className="inline-block w-40 font-semibold text-gray-700">Username:</span>{username}
       </p>

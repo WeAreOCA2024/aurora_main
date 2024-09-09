@@ -1,6 +1,5 @@
 interface AuthFormProps {
   index: number;
-  username: string;
   systemMessage: string;
   inputListName: string[];
   inputList: string[];
@@ -8,18 +7,17 @@ interface AuthFormProps {
 }
 
 
-export const AuthFormComponent = ({index,username,systemMessage,inputListName,inputList,handleInputChange}:AuthFormProps) => {
+export const AuthFormComponent = ({index,systemMessage,inputListName,inputList,handleInputChange}:AuthFormProps) => {
   return(
-    <div>
-      <h2 className="text-3xl text-center mt-64">username : {index != 0 ? username : "未設定"}</h2>
+    <div className="w-screen">
       <p className="text-red-500 text-center">{systemMessage}</p>
-      <div className="flex justify-center mt-12">
+      <div className="flex justify-center">
         <input
           type={inputListName[index]}
           value={inputList[index]}
           onChange={handleInputChange}
-          className="border border-gray-300 rounded-md p-2 w-1/4"
-          maxLength={index != 1 ? 20 : 30}
+          className="border border-gray-300 rounded-md w-1/3 outline-none text-xl text-black px-3 py-2"
+          maxLength={index != 1 ? 20 : 50}
           placeholder={inputListName[index]}
         />
       </div>

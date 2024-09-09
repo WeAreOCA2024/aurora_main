@@ -6,7 +6,7 @@ export default function Meeting() {
   const videoRef = useRef<HTMLVideoElement | null>(null);
 
   const joinMeeting = async () => {
-    try {
+    // try {
       const response = await fetch('/api/join-meeting', {
         method: 'POST',
         headers: {
@@ -14,12 +14,13 @@ export default function Meeting() {
         },
         body: JSON.stringify({
           title: 'my-meeting',
-          attendeeName: 'John Doe',
         }),
       });
 
       if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
+        // レスポンスの内容を取得してエラーメッセージを表示
+        const errorData = await response.json();
+        throw new Error(`HTTP error! status: ${response.status}, message: ${errorData}`);
       }
 
       const data = await response.json();
@@ -27,14 +28,14 @@ export default function Meeting() {
 
       const logger = new ConsoleLogger('MeetingLogs', LogLevel.INFO);
       const deviceController = new DefaultDeviceController(logger);
-      
+
       const configuration = new MeetingSessionConfiguration(data.Meeting, data.Attendee);
       const meetingSession = new DefaultMeetingSession(configuration, logger, deviceController);
 
       const audioInputDevices = await meetingSession.audioVideo.listAudioInputDevices();
       const audioOutputDevices = await meetingSession.audioVideo.listAudioOutputDevices();
       const videoInputDevices = await meetingSession.audioVideo.listVideoInputDevices();
-      
+
       await meetingSession.audioVideo.startAudioInput(audioInputDevices[0].deviceId);
       await meetingSession.audioVideo.chooseAudioOutput(audioOutputDevices[0].deviceId);
       await meetingSession.audioVideo.startVideoInput(videoInputDevices[0].deviceId);
@@ -44,16 +45,17 @@ export default function Meeting() {
         meetingSession.audioVideo.startVideoPreviewForVideoInput(videoRef.current);
       }
 
+      // ミーティングの開始
       meetingSession.audioVideo.start();
-    } catch (error) {
-      console.error('Failed to join meeting:', error);
-    }
+    // } catch (error) {
+    //   console.error('Failed to create meeting:', error);
+    // }
   };
 
   return (
     <div>
-      <h1>Join a Meeting</h1>
-      <button onClick={joinMeeting}>Join Meeting</button>
+      <h1>Create a Meeting</h1>
+      <button onClick={joinMeeting}>Create Meeting</button>
       {meetingInfo && <pre>{JSON.stringify(meetingInfo, null, 2)}</pre>}
       <video ref={videoRef} autoPlay muted style={{ width: '100%', height: 'auto' }}></video>
     </div>

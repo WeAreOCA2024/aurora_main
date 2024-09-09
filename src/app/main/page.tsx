@@ -265,8 +265,6 @@ export default function Page() {
   const [selectedFriend, setSelectedFriend] = useState<UserTypes | null>(null);
   const [meetingInfo, setMeetingInfo] = useState<any>(null);
 
-  // arrow function
-
 
   const handleChangeProfile = (profile: UserTypes) => {
     setUsingProfile(profile);

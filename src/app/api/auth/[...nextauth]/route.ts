@@ -4,9 +4,9 @@ import CognitoProvider from "next-auth/providers/cognito"
 const handler = NextAuth({
   providers: [
     CognitoProvider({
-      clientId: process.env.COGNITO_CLIENT_ID,
-      clientSecret: process.env.COGNITO_CLIENT_SECRET,
-      issuer: process.env.COGNITO_ISSUER,
+      clientId: process.env.AUTH_CLIENT_ID,
+      clientSecret: process.env.AUTH_CLIENT_SECRET,
+      issuer: process.env.AUTH_COGNITO_ISSUER,
     }),
   ],
 })

@@ -2,6 +2,7 @@ import { Menu, Phone } from 'lucide-react'
 import { Inter } from 'next/font/google'
 import React from 'react'
 import Call from '@/assets/svg/call.svg'
+import Meeting from './meeting'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -19,7 +20,7 @@ const DMCompornent = () => {
             </div>
           </div>
           <div className="flex items-center space-x-4">
-            <Call />
+            <Meeting />
             <Menu className="w-6 h-6" />
           </div>
         </div>

@@ -5,7 +5,7 @@ import { fromCognitoIdentityPool } from '@aws-sdk/credential-provider-cognito-id
 import { CognitoIdentityClient } from '@aws-sdk/client-cognito-identity';
 
 const region = 'ap-northeast-1'; // 使用するAWSリージョンを指定
-const identityPoolId = process.env.NEXT_PUBLIC_POOL_ID;
+const identityPoolId = process.env.AUTH_COGNITO_ID;
 
 if (!identityPoolId) {
   throw new Error('POOL_ID is not set in environment variables');

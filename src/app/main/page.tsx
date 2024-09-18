@@ -312,7 +312,6 @@ export default function Page() {
       </section>
       <section className="h-screen w-full bg-Black">
         <DMCompornent />
-        <Meeting />
       </section>
     </main>
   );

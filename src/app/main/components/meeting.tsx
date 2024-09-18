@@ -1,50 +1,59 @@
 'use client'
 
-import { useState, useEffect, useRef } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import { 
-  DefaultDeviceController, 
-  MeetingSessionConfiguration, 
-  ConsoleLogger, 
-  LogLevel, 
+  ChimeSDKMeetings,
+  CreateMeetingCommand,
+  CreateAttendeeCommand
+} from "@aws-sdk/client-chime-sdk-meetings"
+import type { Meeting, Attendee } from "@aws-sdk/client-chime-sdk-meetings"
+import { 
+  ConsoleLogger,
+  DefaultDeviceController,
+  MeetingSessionConfiguration,
   DefaultMeetingSession,
   VideoTileState
 } from 'amazon-chime-sdk-js'
+import type { MeetingSession, AudioVideoFacade } from 'amazon-chime-sdk-js'
 import { toast } from "@/hooks/use-toast"
 import Call from '@/assets/svg/call.svg'
 import Endcall from '@/assets/svg/endcall.svg'
 
+const CHIME_SDK_MEETINGS_CLIENT = new ChimeSDKMeetings({ region: "ap-northeast-1" }) // Replace with your region
+
 export default function Meeting() {
-  const [meetingSession, setMeetingSession] = useState<DefaultMeetingSession | null>(null)
+  const [meetingSession, setMeetingSession] = useState<MeetingSession | null>(null)
   const [isJoined, setIsJoined] = useState(false)
   const [isVideoPreviewOn, setIsVideoPreviewOn] = useState(false)
   const videoRef = useRef<HTMLVideoElement | null>(null)
 
   const joinMeeting = async () => {
     try {
-      const response = await fetch('/api/join-meeting', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          title: 'my-meeting',
-        }),
+      // Create a meeting
+      const createMeetingCommand = new CreateMeetingCommand({
+        ClientRequestToken: Date.now().toString(),
+        MediaRegion: "ap-northeast-1", // Replace with your preferred region
+        ExternalMeetingId: "MyMeetingId"
       })
+      const meetingResponse = await CHIME_SDK_MEETINGS_CLIENT.send(createMeetingCommand)
 
-      if (!response.ok) {
-        const errorData = await response.json()
-        throw new Error(`HTTP error! status: ${response.status}, message: ${errorData}`)
-      }
+      // Create an attendee
+      const createAttendeeCommand = new CreateAttendeeCommand({
+        MeetingId: meetingResponse.Meeting!.MeetingId!,
+        ExternalUserId: `user-${Date.now()}`
+      })
+      const attendeeResponse = await CHIME_SDK_MEETINGS_CLIENT.send(createAttendeeCommand)
 
-      const data = await response.json()
-      
-      const logger = new ConsoleLogger('MeetingLogs', LogLevel.INFO)
+      // Configure the meeting session
+      const logger = new ConsoleLogger('MeetingLogs')
       const deviceController = new DefaultDeviceController(logger)
+      const configuration = new MeetingSessionConfiguration(
+        meetingResponse.Meeting as Meeting, 
+        attendeeResponse.Attendee as Attendee
+      )
+      const newMeetingSession = new DefaultMeetingSession(configuration, logger, deviceController)
 
-      const configuration = new MeetingSessionConfiguration(data.Meeting, data.Attendee)
-      const session = new DefaultMeetingSession(configuration, logger, deviceController)
-
-      setMeetingSession(session)
+      setMeetingSession(newMeetingSession)
       setIsJoined(true)
 
       toast({
@@ -65,29 +74,30 @@ export default function Meeting() {
     if (meetingSession && isJoined) {
       const startAudioVideoDevices = async () => {
         try {
-          const audioInputDevices = await meetingSession.audioVideo.listAudioInputDevices()
-          const audioOutputDevices = await meetingSession.audioVideo.listAudioOutputDevices()
-          const videoInputDevices = await meetingSession.audioVideo.listVideoInputDevices()
+          const audioVideo = meetingSession.audioVideo as AudioVideoFacade
+          const audioInputDevices = await audioVideo.listAudioInputDevices()
+          const audioOutputDevices = await audioVideo.listAudioOutputDevices()
+          const videoInputDevices = await audioVideo.listVideoInputDevices()
 
-          await meetingSession.audioVideo.startAudioInput(audioInputDevices[0].deviceId)
-          await meetingSession.audioVideo.chooseAudioOutput(audioOutputDevices[0].deviceId)
-          await meetingSession.audioVideo.startVideoInput(videoInputDevices[0].deviceId)
+          await audioVideo.startAudioInput(audioInputDevices[0].deviceId)
+          await audioVideo.chooseAudioOutput(audioOutputDevices[0].deviceId)
+          await audioVideo.startVideoInput(videoInputDevices[0].deviceId)
 
           if (videoRef.current) {
-            await meetingSession.audioVideo.startVideoPreviewForVideoInput(videoRef.current)
+            await audioVideo.startVideoPreviewForVideoInput(videoRef.current)
             setIsVideoPreviewOn(true)
           }
 
-          meetingSession.audioVideo.addObserver({
+          audioVideo.addObserver({
             videoTileDidUpdate: (tileState: VideoTileState) => {
-              if (!tileState.boundAttendeeId) {
+              if (!tileState.boundAttendeeId || !videoRef.current) {
                 return
               }
-              meetingSession.audioVideo.bindVideoElement(tileState.tileId, videoRef.current)
+              audioVideo.bindVideoElement(tileState.tileId!, videoRef.current)
             },
           })
 
-          await meetingSession.audioVideo.start()
+          await audioVideo.start()
         } catch (error) {
           console.error('Failed to start audio/video devices:', error)
           toast({
@@ -105,15 +115,16 @@ export default function Meeting() {
   const leaveMeeting = async () => {
     if (meetingSession) {
       try {
+        const audioVideo = meetingSession.audioVideo as AudioVideoFacade
         if (isVideoPreviewOn) {
           if (videoRef.current) {
-            await meetingSession.audioVideo.stopVideoPreviewForVideoInput(videoRef.current)
+            await audioVideo.stopVideoPreviewForVideoInput(videoRef.current)
           }
           setIsVideoPreviewOn(false)
         }
-        await meetingSession.audioVideo.stopVideoInput()
-        await meetingSession.audioVideo.stopAudioInput()
-        meetingSession.audioVideo.stop()
+        await audioVideo.stopVideoInput()
+        await audioVideo.stopAudioInput()
+        audioVideo.stop()
         setMeetingSession(null)
         setIsJoined(false)
         toast({

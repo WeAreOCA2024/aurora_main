@@ -4,12 +4,12 @@ import { AuthFormComponent } from "./authform";
 import { AuthFormButtonsComponent } from "./formbuttons";
 
 export const LoginComponent = ({index,setIndex}:{index:number, setIndex: (i:number) => void}) => {
-  const [username, setUsername] = useState<string>("");
+  const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [systemMessage, setSystemMessage] = useState<string>("");
-  const inputListName = ["Username", "Password"];
-  const inputList = [username, password];
-  const inputSetList = [setUsername, setPassword];
+  const inputListName = ["Email", "Password"];
+  const inputList = [email, password];
+  const inputSetList = [setEmail, setPassword];
   const minLength = [1, 8];
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -41,7 +41,7 @@ export const LoginComponent = ({index,setIndex}:{index:number, setIndex: (i:numb
             <AuthFormButtonsComponent handlePrev={handlePrev} />
           </>
         ):(
-          <LoginSubmitComponent username={username} password={password} handlePrev={handlePrev} />
+          <LoginSubmitComponent email={email} password={password} handlePrev={handlePrev} />
         )}
       </form>
     </>

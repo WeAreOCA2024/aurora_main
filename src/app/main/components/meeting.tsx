@@ -6,20 +6,24 @@ import {
   CreateMeetingCommand,
   CreateAttendeeCommand
 } from "@aws-sdk/client-chime-sdk-meetings"
+import { fromCognitoIdentityPool } from "@aws-sdk/credential-providers"
 import type { Meeting, Attendee } from "@aws-sdk/client-chime-sdk-meetings"
 import { 
   ConsoleLogger,
   DefaultDeviceController,
   MeetingSessionConfiguration,
   DefaultMeetingSession,
-  VideoTileState
+  VideoTileState,
 } from 'amazon-chime-sdk-js'
 import type { MeetingSession, AudioVideoFacade } from 'amazon-chime-sdk-js'
 import { toast } from "@/hooks/use-toast"
 import Call from '@/assets/svg/call.svg'
 import Endcall from '@/assets/svg/endcall.svg'
 
-const CHIME_SDK_MEETINGS_CLIENT = new ChimeSDKMeetings({ region: "ap-northeast-1" }) // Replace with your region
+const REGION = "ap-northeast-1";
+const IDENTITY_POOL_ID = process.env.NEXT_PUBLIC_IDENTITY_POOL_ID!;
+const USER_POOL_ID = process.env.NEXT_PUBLIC_USER_POOL_ID!;
+
 
 export default function Meeting() {
   const [meetingSession, setMeetingSession] = useState<MeetingSession | null>(null)
@@ -27,13 +31,38 @@ export default function Meeting() {
   const [isVideoPreviewOn, setIsVideoPreviewOn] = useState(false)
   const videoRef = useRef<HTMLVideoElement | null>(null)
 
+  const fetchIdToken = async () => {
+    const response = await fetch('/api/auth/get-idtoken');
+    if (!response.ok) {
+      throw new Error('Failed to fetch idToken');
+    }
+    const data = await response.json();
+    console.log(data.idToken)
+    return data.idToken;
+  };
+
   const joinMeeting = async () => {
     try {
+      const idToken = await fetchIdToken();
+      if(!idToken){
+        throw new Error('idTokenがありません')
+      }
+      const CHIME_SDK_MEETINGS_CLIENT = new ChimeSDKMeetings({
+        region: REGION,
+        credentials: fromCognitoIdentityPool({
+          clientConfig: { region: REGION },
+          identityPoolId: IDENTITY_POOL_ID,
+          logins: {
+            [`cognito-idp.${REGION}.amazonaws.com/${USER_POOL_ID}`]: idToken,
+          }
+        })
+      })
+
       // Create a meeting
       const createMeetingCommand = new CreateMeetingCommand({
         ClientRequestToken: Date.now().toString(),
-        MediaRegion: "ap-northeast-1", // Replace with your preferred region
-        ExternalMeetingId: "MyMeetingId"
+        MediaRegion: REGION,
+        ExternalMeetingId: "MyMeetingId",
       })
       const meetingResponse = await CHIME_SDK_MEETINGS_CLIENT.send(createMeetingCommand)
 
@@ -48,8 +77,8 @@ export default function Meeting() {
       const logger = new ConsoleLogger('MeetingLogs')
       const deviceController = new DefaultDeviceController(logger)
       const configuration = new MeetingSessionConfiguration(
-        meetingResponse.Meeting as Meeting, 
-        attendeeResponse.Attendee as Attendee
+        meetingResponse.Meeting, 
+        attendeeResponse.Attendee
       )
       const newMeetingSession = new DefaultMeetingSession(configuration, logger, deviceController)
 

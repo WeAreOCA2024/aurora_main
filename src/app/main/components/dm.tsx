@@ -47,6 +47,7 @@ const DMCompornent = () => {
         ))}
       </div>
       <DmInputComponent />
+      <AbortSigfavoaojoajoj />
     </div>
   )
 }

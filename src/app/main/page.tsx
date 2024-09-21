@@ -7,6 +7,7 @@ import { MyProfileListComponent } from "./components/myprofilelist";
 import { FriendsListComponent } from "./components/friendslist";
 import { PrimarybarComponent } from "./components/primarybar";
 import DMCompornent from "./components/dm";
+import Meeting from "./components/meeting";
 
 const friends: UserTypes[] = [
   {
@@ -262,8 +263,7 @@ export default function Page() {
   const [selectedPrimaryIcon, setSelectedPrimaryIcon] = useState<string>("dm");
   const [usingProfile, setUsingProfile] = useState<UserTypes>(my_profiles[0]);
   const [selectedFriend, setSelectedFriend] = useState<UserTypes | null>(null);
-
-  // arrow function
+  const [meetingInfo, setMeetingInfo] = useState<any>(null);
 
 
   const handleChangeProfile = (profile: UserTypes) => {
@@ -272,6 +272,19 @@ export default function Page() {
 
   const handleChangeSelectedFriend = (friend: UserTypes) => {
     setSelectedFriend(friend);
+  }
+
+  const createChimeMeeting = async () => {
+    try {
+      const response = await fetch('/api/create-chime-meeting', {
+        method: 'post',
+      })
+      const data = await response.json();
+      setMeetingInfo(data);
+      console.log('MeetingInfo:', data);
+    } catch(err) {
+      console.error('Error Create Meeting:', err);
+    }
   }
 
   return (
@@ -288,6 +301,7 @@ export default function Page() {
             );
           }
         })}
+        <button onClick={createChimeMeeting}>Create Meeting</button>
       </section>
       <section className="h-screen w-96 bg-gray2 flex flex-col">
         <MyStatusComponent my_profile={usingProfile} />

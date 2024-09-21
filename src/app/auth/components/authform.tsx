@@ -1,25 +1,29 @@
+import { AuthFormButtonsComponent } from "./FormButtons";
+
 interface AuthFormProps {
-  index: number;
-  systemMessage: string;
-  inputListName: string[];
-  inputList: string[];
-  handleInputChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  inputListName: string;
+  inputList: string;
+  inputListType: string;
+  handleInputChange: ( e: React.ChangeEvent<HTMLInputElement> ) => void;
 }
 
-
-export const AuthFormComponent = ({index,systemMessage,inputListName,inputList,handleInputChange}:AuthFormProps) => {
+export const AuthFormComponent = ({
+  inputListName,
+  inputList,
+  inputListType,
+  handleInputChange
+} : AuthFormProps ) => {
   return(
-    <div className="w-screen">
-      <p className="text-red-500 text-center">{systemMessage}</p>
-      <div className="flex justify-center">
+    <div className="w-screen flex flex-col items-center">
+      <div className="w-1/3 relative">
         <input
-          type={inputListName[index]}
-          value={inputList[index]}
+          type={inputListType}
+          value={inputList}
           onChange={handleInputChange}
-          className="border border-gray-300 rounded-md w-1/3 outline-none text-xl text-black px-3 py-2"
-          maxLength={index != 1 ? 20 : 50}
-          placeholder={inputListName[index]}
+          className="bg-gray-800 rounded-full w-full outline-none text-xl text-gray-200 pl-5 pr-12 h-12"
+          placeholder={inputListName}
         />
+        <AuthFormButtonsComponent/>
       </div>
     </div>
   )
